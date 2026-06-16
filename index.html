@@ -4,7 +4,6 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tokyo Trip 26 June | 두돌 아기와 도쿄 3박4일</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQliHT4p3vn7tM9n8agBDeJRoDt0L2g=" crossorigin="">
   <style>
     :root {
       --paper: #fbfaf7;
@@ -309,10 +308,115 @@
     }
 
     .map {
+      position: relative;
       height: 430px;
       min-height: 430px;
       border-right: 1px solid var(--line);
-      background: #e8ece8;
+      background: #f5efe3;
+      overflow: hidden;
+    }
+
+    .map svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .map .map-bg-label {
+      fill: #6c7774;
+      font-size: 22px;
+      font-weight: 900;
+    }
+
+    .map .map-small-label {
+      fill: #53605c;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .map .map-water-label {
+      fill: #2e6675;
+      font-size: 19px;
+      font-weight: 900;
+    }
+
+    .map .map-title {
+      fill: #17211f;
+      font-size: 27px;
+      font-weight: 900;
+    }
+
+    .map .map-subtitle {
+      fill: #5b6864;
+      font-size: 17px;
+      font-weight: 800;
+    }
+
+    .map .map-caption {
+      fill: #6f6255;
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .map .map-route {
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 11;
+    }
+
+    .map .map-route-shadow {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.95);
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 19;
+    }
+
+    .map .map-pin circle {
+      stroke: #ffffff;
+      stroke-width: 5;
+    }
+
+    .map .map-pin text {
+      fill: #ffffff;
+      font-size: 23px;
+      font-weight: 900;
+      text-anchor: middle;
+      dominant-baseline: central;
+    }
+
+    .map .map-pin-label {
+      fill: #17211f;
+      font-size: 20px;
+      font-weight: 900;
+      paint-order: stroke;
+      stroke: rgba(255, 255, 255, 0.86);
+      stroke-width: 5;
+      stroke-linejoin: round;
+    }
+
+    .map .map-pin-note {
+      fill: #5c6763;
+      font-size: 14px;
+      font-weight: 800;
+      paint-order: stroke;
+      stroke: rgba(255, 255, 255, 0.86);
+      stroke-width: 4;
+      stroke-linejoin: round;
+    }
+
+    .map .map-legend {
+      fill: rgba(255, 255, 255, 0.82);
+      stroke: rgba(221, 215, 204, 0.96);
+      stroke-width: 2;
+    }
+
+    .map .map-district {
+      fill: rgba(255, 255, 255, 0.56);
+      stroke: rgba(192, 181, 160, 0.78);
+      stroke-width: 2;
+      stroke-dasharray: 7 7;
     }
 
     .day-body {
@@ -463,11 +567,6 @@
 
     footer a {
       color: #9fd5d3;
-    }
-
-    .leaflet-popup-content {
-      font-family: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
-      font-weight: 700;
     }
 
     @media (max-width: 980px) {
@@ -631,7 +730,7 @@
           </ul>
         </article>
       </div>
-      <p class="note">지도 속 선은 실제 철도 선형이 아니라 이동 순서 시각화입니다. 실제 플랫폼과 환승은 각 일자 Google Maps 링크에서 출발 직전에 확인하세요.</p>
+      <p class="note">지도는 실제 축척이 아닌 한글 그림지도입니다. 핀 번호 순서대로 움직이면 되고, 정확한 플랫폼과 환승은 각 일자 Google Maps 링크에서 출발 직전에 확인하세요.</p>
     </section>
 
     <section>
@@ -881,85 +980,133 @@
     </div>
   </footer>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script>
-    const routes = {
+    const mapPlaces = {
+      narita: { x: 910, y: 105, label: "나리타공항", note: "공항/시외", dx: -122, dy: -8 },
+      tokyo: { x: 510, y: 270, label: "도쿄역", note: "N'EX", dx: 18, dy: -34 },
+      ginza: { x: 510, y: 360, label: "긴자", note: "쇼핑/숙소", dx: 18, dy: 34 },
+      ginzaBack: { x: 540, y: 382, label: "긴자 복귀", note: "쇼핑/저녁", dx: 22, dy: 36 },
+      yurakucho: { x: 455, y: 330, label: "유라쿠초", note: "저녁", dx: -116, dy: 4 },
+      asakusa: { x: 705, y: 170, label: "아사쿠사", note: "센소지", dx: 18, dy: -30 },
+      ueno: { x: 620, y: 125, label: "우에노", note: "공원/박물관", dx: -104, dy: -24 },
+      tsukiji: { x: 560, y: 430, label: "츠키지", note: "시장", dx: 20, dy: 35 },
+      shiodome: { x: 475, y: 425, label: "신바시·시오도메", note: "유리카모메", dx: -170, dy: 2 },
+      toyosu: { x: 690, y: 440, label: "도요스", note: "센캬쿠반라이", dx: 22, dy: -33 },
+      teamlab: { x: 735, y: 505, label: "팀랩 플래닛", note: "예약 입장", dx: 22, dy: 37 },
+      odaiba: { x: 580, y: 540, label: "오다이바", note: "해변/몰", dx: -116, dy: 36 },
+      divercity: { x: 655, y: 560, label: "다이버시티", note: "건담", dx: 22, dy: 22 }
+    };
+
+    const mapRoutes = {
       "map-day1": {
         color: "#a13d2f",
-        points: [
-          ["Narita Airport", 35.7653, 140.3859],
-          ["Tokyo Station", 35.6812, 139.7671],
-          ["Ginza base", 35.6719, 139.7658],
-          ["Yurakucho", 35.6751, 139.7633]
-        ]
+        title: "도착일 그림지도",
+        subtitle: "나리타 → 도쿄역 → 긴자/유라쿠초",
+        sequence: ["narita", "tokyo", "ginza", "yurakucho"]
       },
       "map-day2": {
         color: "#536f43",
-        points: [
-          ["Ginza base", 35.6719, 139.7658],
-          ["Senso-ji / Asakusa", 35.7148, 139.7967],
-          ["Tokyo National Museum / Ueno", 35.7188, 139.7765],
-          ["Ginza shopping", 35.6699, 139.7649]
-        ]
+        title: "전통 + 쇼핑 그림지도",
+        subtitle: "긴자 → 아사쿠사 → 우에노 옵션 → 긴자",
+        sequence: ["ginza", "asakusa", "ueno", "ginzaBack"]
       },
       "map-day3": {
         color: "#0f6a6d",
-        points: [
-          ["Ginza base", 35.6719, 139.7658],
-          ["Tsukiji Outer Market", 35.6655, 139.7707],
-          ["Shiodome / Shimbashi", 35.6655, 139.7597],
-          ["Toyosu Senkyaku Banrai", 35.6447, 139.7854],
-          ["teamLab Planets TOKYO", 35.6491, 139.7904],
-          ["Odaiba Seaside Park", 35.6298, 139.7754],
-          ["DiverCity Tokyo Plaza", 35.6252, 139.7756]
-        ]
+        title: "베이 에어리어 그림지도",
+        subtitle: "긴자/츠키지 → 도요스 → 팀랩 → 오다이바",
+        sequence: ["ginza", "tsukiji", "shiodome", "toyosu", "teamlab", "odaiba", "divercity"]
       },
       "map-day4": {
         color: "#28547a",
-        points: [
-          ["Ginza base", 35.6719, 139.7658],
-          ["Tokyo Station", 35.6812, 139.7671],
-          ["Narita Airport", 35.7653, 140.3859]
-        ]
+        title: "출국일 그림지도",
+        subtitle: "긴자 → 도쿄역 → 나리타공항",
+        sequence: ["ginza", "tokyo", "narita"]
       }
     };
 
-    function drawRouteMap(id, data) {
-      const el = document.getElementById(id);
-      if (!el || typeof L === "undefined") return;
-
-      const latLngs = data.points.map((point) => [point[1], point[2]]);
-      const map = L.map(id, {
-        scrollWheelZoom: false,
-        zoomControl: true
-      });
-
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        maxZoom: 19,
-        attribution: "&copy; OpenStreetMap contributors"
-      }).addTo(map);
-
-      const line = L.polyline(latLngs, {
-        color: data.color,
-        weight: 4,
-        opacity: 0.9
-      }).addTo(map);
-
-      data.points.forEach((point, index) => {
-        const marker = L.circleMarker([point[1], point[2]], {
-          radius: 8,
-          color: "#ffffff",
-          weight: 2,
-          fillColor: data.color,
-          fillOpacity: 1
-        }).addTo(map);
-        marker.bindPopup(`${index + 1}. ${point[0]}`);
-      });
-
-      map.fitBounds(line.getBounds(), { padding: [28, 28] });
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[char]);
     }
 
-    Object.entries(routes).forEach(([id, data]) => drawRouteMap(id, data));
+    function routePath(sequence) {
+      return sequence
+        .map((id, index) => {
+          const place = mapPlaces[id];
+          return `${index === 0 ? "M" : "L"} ${place.x} ${place.y}`;
+        })
+        .join(" ");
+    }
+
+    function renderPins(sequence, color) {
+      const seen = new Map();
+      return sequence.map((id, index) => {
+        const place = mapPlaces[id];
+        const repeat = seen.has(id);
+        seen.set(id, true);
+        const labelNumber = repeat ? "↺" : index + 1;
+        const labelX = place.x + place.dx;
+        const labelY = place.y + place.dy;
+        const noteY = labelY + 19;
+
+        return `
+          <g class="map-pin">
+            <circle cx="${place.x}" cy="${place.y}" r="20" fill="${color}" />
+            <text x="${place.x}" y="${place.y + 1}">${labelNumber}</text>
+          </g>
+          <text class="map-pin-label" x="${labelX}" y="${labelY}">${escapeHtml(place.label)}</text>
+          <text class="map-pin-note" x="${labelX}" y="${noteY}">${escapeHtml(place.note)}</text>
+        `;
+      }).join("");
+    }
+
+    function drawRouteMap(id, data) {
+      const el = document.getElementById(id);
+      if (!el) return;
+
+      const path = routePath(data.sequence);
+      el.innerHTML = `
+        <svg viewBox="0 0 1000 620" role="img" aria-label="${escapeHtml(data.title)}">
+          <rect width="1000" height="620" fill="#f7f1e8" />
+
+          <path d="M636 330 C745 312 845 344 1000 304 L1000 620 L500 620 C542 568 606 536 666 510 C612 480 590 432 636 330Z" fill="#cce7ee" />
+          <path d="M688 86 C678 154 645 237 631 322 C621 383 652 435 712 459" fill="none" stroke="#b7dce5" stroke-width="28" stroke-linecap="round" />
+          <path d="M688 86 C678 154 645 237 631 322 C621 383 652 435 712 459" fill="none" stroke="#74aebd" stroke-width="5" stroke-linecap="round" opacity="0.9" />
+
+          <rect class="map-district" x="188" y="200" width="180" height="160" rx="28" />
+          <rect class="map-district" x="400" y="214" width="235" height="250" rx="30" />
+          <rect class="map-district" x="596" y="74" width="238" height="190" rx="30" />
+          <rect class="map-district" x="522" y="407" width="344" height="168" rx="30" />
+
+          <text class="map-bg-label" x="224" y="246">서쪽권</text>
+          <text class="map-small-label" x="214" y="278">시부야 · 아오야마</text>
+          <text class="map-bg-label" x="446" y="246">도심권</text>
+          <text class="map-small-label" x="438" y="468">마루노우치 · 긴자</text>
+          <text class="map-bg-label" x="636" y="112">전통권</text>
+          <text class="map-small-label" x="636" y="142">우에노 · 아사쿠사</text>
+          <text class="map-bg-label" x="628" y="594">베이권</text>
+          <text class="map-water-label" x="792" y="508">도쿄만</text>
+          <text class="map-water-label" x="703" y="308" transform="rotate(70 703 308)">스미다강</text>
+
+          <rect class="map-legend" x="28" y="25" width="395" height="82" rx="18" />
+          <text class="map-title" x="50" y="58">${escapeHtml(data.title)}</text>
+          <text class="map-subtitle" x="50" y="87">${escapeHtml(data.subtitle)}</text>
+
+          <path class="map-route-shadow" d="${path}" />
+          <path class="map-route" d="${path}" stroke="${data.color}" />
+          ${renderPins(data.sequence, data.color)}
+
+          <text class="map-caption" x="40" y="590">실제 축척 아님 · 핀 번호 순서대로 이동 · 나리타는 도심 밖이라 가까이 축약 표시</text>
+        </svg>
+      `;
+    }
+
+    Object.entries(mapRoutes).forEach(([id, data]) => drawRouteMap(id, data));
   </script>
 </body>
 </html>
