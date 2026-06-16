@@ -160,7 +160,14 @@
       gap: 16px;
     }
 
-    .hotel {
+    .family-hotel-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .hotel,
+    .family-hotel {
       padding: 22px;
       background: var(--surface);
       border: 1px solid var(--line);
@@ -189,7 +196,29 @@
       background: var(--blue);
     }
 
+    .family-hotel .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 4px 10px;
+      margin-bottom: 14px;
+      color: #fff;
+      background: var(--red);
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    .family-hotel:nth-child(2n) .tag {
+      background: var(--teal);
+    }
+
+    .family-hotel:nth-child(3n) .tag {
+      background: var(--blue);
+    }
+
     .hotel ul,
+    .family-hotel ul,
     .compact-list,
     .time-list,
     .experience-list,
@@ -199,6 +228,7 @@
     }
 
     .hotel li,
+    .family-hotel li,
     .compact-list li,
     .time-list li,
     .experience-list li,
@@ -406,6 +436,38 @@
       stroke-linejoin: round;
     }
 
+    .map .map-star-marker {
+      fill: #c28524;
+      font-size: 46px;
+      font-weight: 900;
+      text-anchor: middle;
+      dominant-baseline: central;
+      paint-order: stroke;
+      stroke: rgba(255, 255, 255, 0.94);
+      stroke-width: 5;
+      stroke-linejoin: round;
+    }
+
+    .map .map-star-label {
+      fill: #17211f;
+      font-size: 19px;
+      font-weight: 900;
+      paint-order: stroke;
+      stroke: rgba(255, 255, 255, 0.88);
+      stroke-width: 5;
+      stroke-linejoin: round;
+    }
+
+    .map .map-star-note {
+      fill: #6e4c1f;
+      font-size: 14px;
+      font-weight: 900;
+      paint-order: stroke;
+      stroke: rgba(255, 255, 255, 0.88);
+      stroke-width: 4;
+      stroke-linejoin: round;
+    }
+
     .map .map-legend {
       fill: rgba(255, 255, 255, 0.82);
       stroke: rgba(221, 215, 204, 0.96);
@@ -572,6 +634,7 @@
     @media (max-width: 980px) {
       .quick-facts,
       .hotel-grid,
+      .family-hotel-grid,
       .summary-grid,
       .day-grid,
       .split,
@@ -603,6 +666,7 @@
 
       .fact,
       .hotel,
+      .family-hotel,
       .panel,
       .theme,
       .day-body {
@@ -706,6 +770,99 @@
     </section>
 
     <section>
+      <h2>긴자 아이 동반 호텔 후보</h2>
+      <p class="section-intro">두돌 아기와 함께라면 위치보다 “방 안에서 쉬기 쉬운가”가 더 중요합니다. 유모차 접근, 욕실 구조, 간단 식사 대응, 낮잠 복귀 동선을 기준으로 추렸습니다.</p>
+      <div class="family-hotel-grid">
+        <article class="family-hotel">
+          <span class="tag">아이동반 최우선</span>
+          <h3>MIMARU Tokyo Ginza East</h3>
+          <p>주방과 식탁이 있는 아파트형 호텔입니다. 아이 식사, 간식, 낮잠 후 재정비가 가장 쉽습니다.</p>
+          <ul>
+            <li><strong>장점:</strong> 전 객실 주방/식탁 구성, 가족 단위 객실이 넓고 최대 6명까지 가능한 타입이 있어 캐리어와 유모차 보관이 편합니다.</li>
+            <li><strong>단점:</strong> 긴자 메인 스트리트 한복판은 아니라 마츠야/미츠코시까지 도보 이동이 조금 생깁니다. 고급 호텔식 부대시설은 약합니다.</li>
+            <li><strong>추천 객실:</strong> Family Apartment 또는 Premium Family Apartment.</li>
+          </ul>
+          <div class="btn-row">
+            <a class="btn secondary" href="https://mimaruhotels.com/en/hotel/ginza-east/" target="_blank" rel="noreferrer">공식 사이트</a>
+          </div>
+        </article>
+
+        <article class="family-hotel">
+          <span class="tag">가성비 균형</span>
+          <h3>Daiwa Roynet Hotel Ginza PREMIER</h3>
+          <p>긴자잇초메 쪽에 있어 쇼핑과 식당 접근이 좋고, 욕실 구조가 아이 목욕에 유리합니다.</p>
+          <ul>
+            <li><strong>장점:</strong> 일부 객실을 제외하고 욕실과 화장실이 반분리형이며, 씻기는 공간이 있어 두돌 아기 목욕이 편합니다. 가족/그룹용 Fourth Room도 추가되었습니다.</li>
+            <li><strong>단점:</strong> 기본 객실은 도쿄 호텔답게 여전히 컴팩트합니다. 유모차와 큰 캐리어가 있으면 넓은 타입을 잡아야 만족도가 높습니다.</li>
+            <li><strong>추천 객실:</strong> Fourth Room, Twin 이상 넓은 객실.</li>
+          </ul>
+          <div class="btn-row">
+            <a class="btn secondary" href="https://www.daiwaroynet.jp/en/ginza/" target="_blank" rel="noreferrer">공식 사이트</a>
+          </div>
+        </article>
+
+        <article class="family-hotel">
+          <span class="tag">역 접근 최상</span>
+          <h3>Millennium Mitsui Garden Hotel Tokyo</h3>
+          <p>히가시긴자역 A1 출구 1분, 긴자역 A5 출구 2분이라 유모차 동선이 짧습니다.</p>
+          <ul>
+            <li><strong>장점:</strong> 마츠야 긴자, 미츠코시, 가부키자, 긴자선/히비야선 접근이 좋아 쇼핑 중간에 숙소 복귀하기 쉽습니다. 3인 투숙 가능한 객실도 있습니다.</li>
+            <li><strong>단점:</strong> 아파트형은 아니라 주방/세탁 편의는 부족합니다. 기본 객실은 유모차를 펼쳐두면 여유가 크지 않을 수 있습니다.</li>
+            <li><strong>추천 객실:</strong> Triple 또는 Corner 계열 넓은 객실.</li>
+          </ul>
+          <div class="btn-row">
+            <a class="btn secondary" href="https://www.gardenhotels.co.jp/millennium-tokyo/eng/" target="_blank" rel="noreferrer">공식 사이트</a>
+          </div>
+        </article>
+
+        <article class="family-hotel">
+          <span class="tag">어른 만족도</span>
+          <h3>Hyatt Centric Ginza Tokyo</h3>
+          <p>나미키도리 중심부라 긴자 쇼핑, 저녁 산책, 디저트 동선이 가장 화려합니다.</p>
+          <ul>
+            <li><strong>장점:</strong> 긴자 한복판의 위치와 넓은 객실, 레스토랑, 컨시어지 대응이 좋습니다. 어른들의 쇼핑 만족도를 크게 올립니다.</li>
+            <li><strong>단점:</strong> 가격대가 높고, 아이 식사용 주방/세탁 같은 장기체류 편의는 약합니다. 객실별 침대/아기침대 가능 여부를 예약 전에 확인해야 합니다.</li>
+            <li><strong>추천 객실:</strong> Twin 또는 Suite 계열, 아기침대 가능 여부 사전 확인.</li>
+          </ul>
+          <div class="btn-row">
+            <a class="btn secondary" href="https://www.hyatt.com/hyatt-centric/en-US/tyoct-hyatt-centric-ginza-tokyo/" target="_blank" rel="noreferrer">공식 사이트</a>
+          </div>
+        </article>
+
+        <article class="family-hotel">
+          <span class="tag">도쿄역 접근</span>
+          <h3>THE GATE HOTEL TOKYO by HULIC</h3>
+          <p>유라쿠초·히비야·긴자 사이에 있어 N'EX 도쿄역 접근과 긴자 산책을 같이 잡기 좋습니다.</p>
+          <ul>
+            <li><strong>장점:</strong> 유라쿠초역과 긴자가 가까워 출국일 도쿄역 택시 이동이 단순합니다. 객실 분위기가 차분해 어른 휴식감도 좋습니다.</li>
+            <li><strong>단점:</strong> 가족 특화 호텔은 아니므로 넓은 객실 선택이 중요합니다. 긴자 동쪽 백화점/마츠야까지는 중심부 호텔보다 조금 더 걷습니다.</li>
+            <li><strong>추천 객실:</strong> Deluxe Twin 이상 넓은 객실.</li>
+          </ul>
+          <div class="btn-row">
+            <a class="btn secondary" href="https://www.gate-hotel.jp/en/tokyo/" target="_blank" rel="noreferrer">공식 사이트</a>
+          </div>
+        </article>
+
+        <article class="family-hotel">
+          <span class="tag">생활 편의</span>
+          <h3>Mitsui Garden Hotel Ginza Tsukiji</h3>
+          <p>긴자 동쪽·츠키지 쪽의 조용한 베이스입니다. 객실 내 세탁건조기와 전자레인지가 강점입니다.</p>
+          <ul>
+            <li><strong>장점:</strong> 전 객실 세탁건조기와 전자레인지가 있어 아이 옷, 턱받이, 젖은 수건 관리가 쉽습니다. 츠키지 아침 식사와 히가시긴자 접근도 좋습니다.</li>
+            <li><strong>단점:</strong> 긴자 중심 야경과 명품 쇼핑 분위기는 서쪽/중심부 호텔보다 약합니다. 이동은 짧지만 “긴자 한복판” 느낌은 덜합니다.</li>
+            <li><strong>추천 객실:</strong> Twin 이상, 긴자 쇼핑보다 생활 편의를 중시할 때.</li>
+          </ul>
+          <div class="btn-row">
+            <a class="btn secondary" href="https://www.gardenhotels.co.jp/ginza-tsukiji/eng/" target="_blank" rel="noreferrer">공식 사이트</a>
+          </div>
+        </article>
+      </div>
+      <div class="callout">
+        <p><strong>추천 순서:</strong> 아이 컨디션 최우선이면 MIMARU, 쇼핑과 가성비 균형은 Daiwa Roynet, 지하철 접근은 Millennium Mitsui Garden, 어른 만족도는 Hyatt Centric이 가장 좋습니다. 방이 좁으면 유모차와 캐리어가 바로 피로가 되므로, 최저가 객실보다 넓은 Twin/Family 타입을 먼저 보세요.</p>
+      </div>
+    </section>
+
+    <section>
       <h2>교통·예산 기준</h2>
       <div class="summary-grid">
         <article class="panel">
@@ -784,15 +941,17 @@
               <li><span class="time">11:00</span><span>아사쿠사에서 이른 점심. 긴 줄 라멘보다 소바, 텐동, 오니기리, 패밀리 레스토랑을 우선.</span></li>
               <li><span class="time">12:30</span><span>숙소 복귀 또는 우에노공원/도쿄국립박물관 60~90분 옵션.</span></li>
               <li><span class="time">15:00</span><span>긴자 쇼핑. 6~9월 주말/공휴일은 보통 12:00~18:00 보행자 천국입니다.</span></li>
+              <li><span class="time">15:30</span><span>BAO BAO ISSEY MIYAKE 松屋銀座 1F에서 구매. 인기 제품은 재고와 대기 줄 변수가 있어 긴자 쇼핑 초반에 먼저 처리합니다.</span></li>
               <li><span class="time">18:00</span><span>미츠코시·마츠야·GINZA SIX 식당층 또는 유라쿠초 쪽에서 저녁 후 복귀.</span></li>
             </ul>
             <div class="route-box">
-              <p><strong>이동:</strong> Ginza → Asakusa/Sensoji → Ueno optional → Ginza</p>
+              <p><strong>이동:</strong> Ginza → Asakusa/Sensoji → Ueno optional → Ginza → BAO BAO ISSEY MIYAKE Matsuya Ginza</p>
               <p><strong>교통비:</strong> 지하철 1회 보통 180~260엔대. 성인 2명 총 1,000~1,600엔 선. 피곤하면 아사쿠사→긴자 택시 약 3,000~4,500엔 예상.</p>
-              <p><strong>즐길 것:</strong> 센소지, 나카미세, 스미다강 산책, Itoya 문구, MUJI Ginza, UNIQLO Ginza, Ginza Six, 백화점 데파치카.</p>
+              <p><strong>즐길 것:</strong> 센소지, 나카미세, 스미다강 산책, BAO BAO, Itoya 문구, MUJI Ginza, UNIQLO Ginza, Ginza Six, 백화점 데파치카.</p>
               <div class="btn-row">
-                <a class="btn" href="https://www.google.com/maps/dir/?api=1&origin=Ginza,+Tokyo&destination=Ginza+Six,+Tokyo&waypoints=Senso-ji,+Tokyo%7CTokyo+National+Museum&travelmode=transit" target="_blank" rel="noreferrer">Google Maps 경로</a>
+                <a class="btn" href="https://www.google.com/maps/dir/?api=1&origin=Ginza,+Tokyo&destination=Ginza+Six,+Tokyo&waypoints=Senso-ji,+Tokyo%7CTokyo+National+Museum%7CBAO+BAO+ISSEY+MIYAKE+Matsuya+Ginza&travelmode=transit" target="_blank" rel="noreferrer">Google Maps 경로</a>
                 <a class="btn secondary" href="https://www.ginza.jp/en/townguide/pedestrian-zone" target="_blank" rel="noreferrer">긴자 보행자 천국</a>
+                <a class="btn secondary" href="https://www.google.com/maps/search/?api=1&query=BAO+BAO+ISSEY+MIYAKE+Matsuya+Ginza" target="_blank" rel="noreferrer">바오바오 위치</a>
               </div>
             </div>
           </div>
@@ -895,6 +1054,12 @@
             <td>아사쿠사→오다이바 성인 2,000엔 전후.</td>
           </tr>
           <tr>
+            <td>BAO BAO ISSEY MIYAKE 松屋銀座</td>
+            <td>중간</td>
+            <td>예약보다 재고와 대기 줄 확인이 중요합니다. 토요일 긴자 쇼핑 초반에 먼저 들르고, 실패하면 ISSEY MIYAKE GINZA / 442도 후보로 둡니다.</td>
+            <td>구매품별 상이. 위치는 마츠야 긴자 1F, 긴자역/긴자잇초메역 권역.</td>
+          </tr>
+          <tr>
             <td>식당</td>
             <td>낮음</td>
             <td>두돌 아기 동반이면 고정 예약보다 백화점 식당층, 몰, 호텔 근처 식당을 유연하게 쓰는 편이 좋습니다.</td>
@@ -959,7 +1124,7 @@
   <footer>
     <div class="wrap">
       <h2>확인한 주요 출처</h2>
-      <p class="note">요금과 운영 조건은 2026년 6월 16일 기준으로 확인했습니다. 결제 직전 공식 페이지에서 한 번 더 확인하세요.</p>
+      <p class="note">요금과 운영 조건은 2026년 6월 17일 기준으로 확인했습니다. 결제 직전 공식 페이지에서 한 번 더 확인하세요.</p>
       <ul class="source-list">
         <li><a href="https://www.jreast.co.jp/en/multi/nex/" target="_blank" rel="noreferrer">JR East N'EX Tokyo Round Trip Ticket</a></li>
         <li><a href="https://www.keisei.co.jp/keisei/tetudou/skyliner/us/traffic/skyliner_fares.php" target="_blank" rel="noreferrer">Keisei Skyliner fares</a></li>
@@ -976,6 +1141,9 @@
         <li><a href="https://www.tnm.jp/modules/r_free_page/index.php?id=113&lang=en" target="_blank" rel="noreferrer">Tokyo National Museum visitor information</a></li>
         <li><a href="https://en.sumida-aquarium.com/news/5671/" target="_blank" rel="noreferrer">Sumida Aquarium admission price notice</a></li>
         <li><a href="https://en.tokyo-skytree.jp/ticket/" target="_blank" rel="noreferrer">Tokyo Skytree official tickets</a></li>
+        <li><a href="https://www.isseymiyake.com/pages/stores" target="_blank" rel="noreferrer">ISSEY MIYAKE store search</a> · <a href="https://www.isseymiyake.com/blogs/news/10210" target="_blank" rel="noreferrer">ISSEY MIYAKE GINZA / 442 official news</a></li>
+        <li><a href="https://mimaruhotels.com/en/hotel/ginza-east/" target="_blank" rel="noreferrer">MIMARU Tokyo Ginza East</a> · <a href="https://www.daiwaroynet.jp/en/ginza/" target="_blank" rel="noreferrer">Daiwa Roynet Hotel Ginza PREMIER</a> · <a href="https://www.gardenhotels.co.jp/millennium-tokyo/eng/" target="_blank" rel="noreferrer">Millennium Mitsui Garden Hotel Tokyo</a></li>
+        <li><a href="https://www.hyatt.com/hyatt-centric/en-US/tyoct-hyatt-centric-ginza-tokyo/" target="_blank" rel="noreferrer">Hyatt Centric Ginza Tokyo</a> · <a href="https://www.gate-hotel.jp/en/tokyo/" target="_blank" rel="noreferrer">THE GATE HOTEL TOKYO by HULIC</a> · <a href="https://www.gardenhotels.co.jp/ginza-tsukiji/eng/" target="_blank" rel="noreferrer">Mitsui Garden Hotel Ginza Tsukiji</a></li>
       </ul>
     </div>
   </footer>
@@ -986,6 +1154,7 @@
       tokyo: { x: 510, y: 270, label: "도쿄역", note: "N'EX", dx: 18, dy: -34 },
       ginza: { x: 510, y: 360, label: "긴자", note: "쇼핑/숙소", dx: 18, dy: 34 },
       ginzaBack: { x: 540, y: 382, label: "긴자 복귀", note: "쇼핑/저녁", dx: 22, dy: 36 },
+      baoBao: { x: 545, y: 328, label: "BAO BAO", note: "마츠야 1F", dx: 28, dy: -26 },
       yurakucho: { x: 455, y: 330, label: "유라쿠초", note: "저녁", dx: -116, dy: 4 },
       asakusa: { x: 705, y: 170, label: "아사쿠사", note: "센소지", dx: 18, dy: -30 },
       ueno: { x: 620, y: 125, label: "우에노", note: "공원/박물관", dx: -104, dy: -24 },
@@ -1007,8 +1176,9 @@
       "map-day2": {
         color: "#536f43",
         title: "전통 + 쇼핑 그림지도",
-        subtitle: "긴자 → 아사쿠사 → 우에노 옵션 → 긴자",
-        sequence: ["ginza", "asakusa", "ueno", "ginzaBack"]
+        subtitle: "긴자 → 아사쿠사 → 우에노 옵션 → 긴자 · BAO BAO",
+        sequence: ["ginza", "asakusa", "ueno", "ginzaBack"],
+        highlights: ["baoBao"]
       },
       "map-day3": {
         color: "#0f6a6d",
@@ -1065,6 +1235,24 @@
       }).join("");
     }
 
+    function renderHighlights(highlights = []) {
+      return highlights.map((id) => {
+        const place = mapPlaces[id];
+        if (!place) return "";
+        const labelX = place.x + place.dx;
+        const labelY = place.y + place.dy;
+        const noteY = labelY + 19;
+
+        return `
+          <g class="map-star">
+            <text class="map-star-marker" x="${place.x}" y="${place.y}">★</text>
+            <text class="map-star-label" x="${labelX}" y="${labelY}">${escapeHtml(place.label)}</text>
+            <text class="map-star-note" x="${labelX}" y="${noteY}">${escapeHtml(place.note)}</text>
+          </g>
+        `;
+      }).join("");
+    }
+
     function drawRouteMap(id, data) {
       const el = document.getElementById(id);
       if (!el) return;
@@ -1100,6 +1288,7 @@
           <path class="map-route-shadow" d="${path}" />
           <path class="map-route" d="${path}" stroke="${data.color}" />
           ${renderPins(data.sequence, data.color)}
+          ${renderHighlights(data.highlights)}
 
           <text class="map-caption" x="40" y="590">실제 축척 아님 · 핀 번호 순서대로 이동 · 나리타는 도심 밖이라 가까이 축약 표시</text>
         </svg>
