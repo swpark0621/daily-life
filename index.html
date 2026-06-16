@@ -1,0 +1,965 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tokyo Trip 26 June | 두돌 아기와 도쿄 3박4일</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQliHT4p3vn7tM9n8agBDeJRoDt0L2g=" crossorigin="">
+  <style>
+    :root {
+      --paper: #fbfaf7;
+      --surface: #ffffff;
+      --ink: #17211f;
+      --muted: #61706c;
+      --line: #ddd7cc;
+      --red: #a13d2f;
+      --teal: #0f6a6d;
+      --blue: #28547a;
+      --green: #536f43;
+      --gold: #a66f2e;
+      --shadow: 0 18px 48px rgba(30, 33, 30, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", "Segoe UI", system-ui, sans-serif;
+      line-height: 1.6;
+    }
+
+    a {
+      color: var(--teal);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .wrap {
+      width: min(1160px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    header {
+      border-bottom: 1px solid var(--line);
+      background:
+        linear-gradient(90deg, rgba(251,250,247,0.94), rgba(251,250,247,0.72)),
+        url("https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=1800&q=80") center/cover;
+    }
+
+    .hero {
+      min-height: 520px;
+      display: grid;
+      align-content: end;
+      padding: 72px 0 56px;
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+      color: var(--red);
+      font-size: 0.92rem;
+      font-weight: 800;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 820px;
+      font-size: clamp(2.25rem, 5vw, 4.7rem);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .lede {
+      max-width: 760px;
+      margin: 22px 0 0;
+      color: #2d3b38;
+      font-size: clamp(1.04rem, 2vw, 1.25rem);
+      font-weight: 600;
+    }
+
+    .quick-facts {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 36px;
+    }
+
+    .fact {
+      min-height: 118px;
+      padding: 18px;
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid rgba(221, 215, 204, 0.92);
+      border-radius: 8px;
+      box-shadow: 0 10px 28px rgba(35, 39, 36, 0.06);
+    }
+
+    .fact strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .fact span {
+      display: block;
+      font-size: 1rem;
+      font-weight: 800;
+    }
+
+    main {
+      padding: 36px 0 72px;
+    }
+
+    section {
+      margin-top: 42px;
+    }
+
+    h2 {
+      margin: 0 0 18px;
+      font-size: clamp(1.45rem, 3vw, 2.2rem);
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 0 0 10px;
+      font-size: 1.08rem;
+      line-height: 1.28;
+      letter-spacing: 0;
+    }
+
+    .section-intro {
+      max-width: 860px;
+      margin: -8px 0 20px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .callout {
+      padding: 20px 22px;
+      background: #fff9ee;
+      border: 1px solid #ead8b7;
+      border-left: 5px solid var(--gold);
+      border-radius: 8px;
+    }
+
+    .callout p {
+      margin: 0;
+    }
+
+    .hotel-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .hotel {
+      padding: 22px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .hotel .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 4px 10px;
+      margin-bottom: 14px;
+      color: #fff;
+      background: var(--teal);
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    .hotel:nth-child(2) .tag {
+      background: var(--green);
+    }
+
+    .hotel:nth-child(3) .tag {
+      background: var(--blue);
+    }
+
+    .hotel ul,
+    .compact-list,
+    .time-list,
+    .experience-list,
+    .source-list {
+      padding-left: 1.1rem;
+      margin: 10px 0 0;
+    }
+
+    .hotel li,
+    .compact-list li,
+    .time-list li,
+    .experience-list li,
+    .source-list li {
+      margin: 7px 0;
+    }
+
+    .score {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .score div {
+      padding: 12px;
+      background: #f3f0e9;
+      border-radius: 8px;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .score small {
+      display: block;
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .panel {
+      padding: 22px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      padding: 5px 10px;
+      background: #edf4f3;
+      border: 1px solid #cfe2df;
+      border-radius: 999px;
+      color: #1f4b4b;
+      font-size: 0.85rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .day {
+      margin-top: 26px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .day-head {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      align-items: center;
+      padding: 22px 24px;
+      border-bottom: 1px solid var(--line);
+      background: #f7f3eb;
+    }
+
+    .day-head p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .day-number {
+      display: inline-grid;
+      place-items: center;
+      width: 52px;
+      height: 52px;
+      color: #fff;
+      background: var(--red);
+      border-radius: 50%;
+      font-weight: 900;
+    }
+
+    .day-grid {
+      display: grid;
+      grid-template-columns: minmax(320px, 0.95fr) minmax(360px, 1.05fr);
+      gap: 0;
+      align-items: start;
+    }
+
+    .map {
+      height: 430px;
+      min-height: 430px;
+      border-right: 1px solid var(--line);
+      background: #e8ece8;
+    }
+
+    .day-body {
+      padding: 22px 24px;
+    }
+
+    .time-list {
+      list-style: none;
+      padding-left: 0;
+      margin-top: 0;
+    }
+
+    .time-list li {
+      display: grid;
+      grid-template-columns: 92px 1fr;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee9df;
+    }
+
+    .time-list li:last-child {
+      border-bottom: 0;
+    }
+
+    .time {
+      color: var(--red);
+      font-weight: 900;
+    }
+
+    .route-box {
+      margin-top: 18px;
+      padding: 16px;
+      background: #f6f8f7;
+      border: 1px solid #dce5e1;
+      border-radius: 8px;
+    }
+
+    .route-box p {
+      margin: 7px 0;
+    }
+
+    .money {
+      color: #244c3b;
+      font-weight: 900;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      min-height: 38px;
+      padding: 8px 12px;
+      color: #fff;
+      background: var(--teal);
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 900;
+    }
+
+    .btn.secondary {
+      background: var(--blue);
+    }
+
+    .btn:hover {
+      text-decoration: none;
+      filter: brightness(0.96);
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .theme-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .theme {
+      padding: 22px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .theme .route {
+      margin: 12px 0;
+      padding: 12px;
+      background: #f3f0e9;
+      border-radius: 8px;
+      font-weight: 800;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    th,
+    td {
+      padding: 14px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: #ffffff;
+      background: #243633;
+      font-size: 0.9rem;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .note {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      font-weight: 650;
+    }
+
+    footer {
+      padding: 34px 0 56px;
+      background: #17211f;
+      color: #e9ebe5;
+    }
+
+    footer h2 {
+      color: #ffffff;
+    }
+
+    footer a {
+      color: #9fd5d3;
+    }
+
+    .leaflet-popup-content {
+      font-family: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      font-weight: 700;
+    }
+
+    @media (max-width: 980px) {
+      .quick-facts,
+      .hotel-grid,
+      .summary-grid,
+      .day-grid,
+      .split,
+      .theme-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .map {
+        height: 360px;
+        min-height: 360px;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+    }
+
+    @media (max-width: 620px) {
+      .wrap {
+        width: min(100% - 22px, 1160px);
+      }
+
+      .hero {
+        min-height: 500px;
+        padding: 48px 0 34px;
+      }
+
+      .quick-facts {
+        gap: 10px;
+      }
+
+      .fact,
+      .hotel,
+      .panel,
+      .theme,
+      .day-body {
+        padding: 16px;
+      }
+
+      .day-head {
+        grid-template-columns: 1fr;
+        padding: 18px;
+      }
+
+      .time-list li {
+        grid-template-columns: 76px 1fr;
+      }
+
+      th,
+      td {
+        padding: 11px;
+        font-size: 0.92rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap hero">
+      <p class="eyebrow">Tokyo Trip 26 June · Family 3 Nights</p>
+      <h1>두돌 아기와 아내랑, 무리 없이 도쿄를 제대로 느끼는 3박4일</h1>
+      <p class="lede">2026년 6월 19일 금요일 16:00 나리타 도착, 6월 22일 월요일 12:30 나리타 출발 기준. 화려한 긴자, 전통적인 아사쿠사, 최신 베이 에어리어와 teamLab Planets를 한 번에 묶은 동선입니다.</p>
+      <div class="quick-facts">
+        <div class="fact"><strong>가족 리듬</strong><span>하루 한 곳만 확실히, 낮잠/휴식 블록 고정</span></div>
+        <div class="fact"><strong>최종 추천 숙소</strong><span>긴자·도쿄역·유라쿠초 권역</span></div>
+        <div class="fact"><strong>교통 원칙</strong><span>N'EX 왕복 + IC카드 + 일요일 유리카모메 패스</span></div>
+        <div class="fact"><strong>예약 우선순위</strong><span>teamLab Planets, 공항열차, 필요 시 수상버스</span></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section>
+      <div class="callout">
+        <p><strong>결론:</strong> 이번 일정은 긴자/도쿄역권 숙박이 가장 좋습니다. 나리타 왕복이 단순하고, 토요일 오후 긴자 보행자 천국 쇼핑을 넣기 좋으며, 도요스·오다이바도 택시나 유리카모메로 무리 없이 연결됩니다. 두돌 아기는 대부분 대중교통 무료지만, 지정석을 따로 쓰면 어린이 요금이 필요합니다.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>숙소 위치 3안</h2>
+      <p class="section-intro">일정 전체의 피로도는 숙소 위치가 결정합니다. 아이 동반이면 “한 번에 멀리 가는 날”보다 “숙소로 쉽게 복귀하는 날”이 중요합니다.</p>
+      <div class="hotel-grid">
+        <article class="hotel">
+          <span class="tag">1안 · 최종 추천</span>
+          <h3>긴자 · 도쿄역 · 유라쿠초</h3>
+          <p>첫 도쿄 가족여행의 균형점입니다. 쇼핑, 공항열차, 택시 복귀, 백화점 유아시설이 모두 편합니다.</p>
+          <ul>
+            <li><strong>장점:</strong> N'EX로 도쿄역 직결, 긴자 쇼핑이 일정 안에 자연스럽게 들어감, 저녁 산책이 화려함.</li>
+            <li><strong>단점:</strong> 숙박비가 가장 높고, 아사쿠사·도요스는 지하철/택시 이동이 필요.</li>
+            <li><strong>공항:</strong> N'EX 도쿄역 왕복권 성인 5,200엔. 도쿄역에서 호텔까지 택시 1,000~1,800엔 예상.</li>
+          </ul>
+          <div class="score">
+            <div><small>아이동선</small>상</div>
+            <div><small>쇼핑</small>최상</div>
+            <div><small>전통</small>중</div>
+            <div><small>예산</small>중상</div>
+          </div>
+        </article>
+
+        <article class="hotel">
+          <span class="tag">2안 · 가성비/전통</span>
+          <h3>우에노 · 아사쿠사</h3>
+          <p>전통 분위기와 비용 효율이 좋습니다. 나리타에서 스카이라이너로 들어오면 빠르고 명확합니다.</p>
+          <ul>
+            <li><strong>장점:</strong> 게이세이 스카이라이너가 우에노/닛포리로 빠름, 아사쿠사·우에노공원이 가까움, 식비가 상대적으로 편함.</li>
+            <li><strong>단점:</strong> 긴자 쇼핑과 도요스 이동은 매번 남쪽으로 내려와야 해서 피로가 쌓일 수 있음.</li>
+            <li><strong>공항:</strong> 스카이라이너 우에노/닛포리 성인 편도 2,470엔. 성인 2명 왕복 9,880엔.</li>
+          </ul>
+          <div class="score">
+            <div><small>아이동선</small>중상</div>
+            <div><small>쇼핑</small>중</div>
+            <div><small>전통</small>최상</div>
+            <div><small>예산</small>상</div>
+          </div>
+        </article>
+
+        <article class="hotel">
+          <span class="tag">3안 · 베이/긴자 절충</span>
+          <h3>시오도메 · 츠키지 · 신바시</h3>
+          <p>도요스, 오다이바, 긴자를 모두 짧게 잇는 위치입니다. 호텔 주변은 업무지구 성격이 강해 밤이 차분합니다.</p>
+          <ul>
+            <li><strong>장점:</strong> 유리카모메 접근이 좋아 teamLab/오다이바 날이 편함, 하마리큐·츠키지·긴자가 가까움.</li>
+            <li><strong>단점:</strong> 나리타 직결감은 도쿄역/우에노보다 약하고, 주말 저녁 선택지가 긴자 쪽으로 몰림.</li>
+            <li><strong>공항:</strong> N'EX 도쿄역 후 택시, 또는 스카이라이너 닛포리 후 JR/택시 환승.</li>
+          </ul>
+          <div class="score">
+            <div><small>아이동선</small>상</div>
+            <div><small>쇼핑</small>상</div>
+            <div><small>전통</small>중상</div>
+            <div><small>예산</small>중</div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h2>교통·예산 기준</h2>
+      <div class="summary-grid">
+        <article class="panel">
+          <h3>추천 교통 조합</h3>
+          <ul class="compact-list">
+            <li><strong>숙소가 긴자/도쿄역권:</strong> JR N'EX TOKYO Round Trip Ticket 성인 5,200엔. 성인 2명 총 10,400엔.</li>
+            <li><strong>숙소가 우에노/아사쿠사권:</strong> Keisei Skyliner 우에노/닛포리 성인 편도 2,470엔. 성인 2명 왕복 9,880엔.</li>
+            <li><strong>도쿄 시내:</strong> 짧은 지하철은 180~330엔대. 아이 낮잠 타이밍에는 택시를 섞는 편이 만족도가 높습니다.</li>
+            <li><strong>일요일 베이 에어리어:</strong> 유리카모메 1일 패스 성인 820엔. 3번 이상 타면 편합니다.</li>
+            <li><strong>두돌 아기:</strong> 동반 성인 1명당 유아 2명까지 무료인 경우가 많습니다. 지정석을 따로 쓰면 어린이 요금이 필요합니다.</li>
+          </ul>
+        </article>
+        <article class="panel">
+          <h3>대략 예산감</h3>
+          <p>항공·숙박·쇼핑 제외, 성인 2명+두돌 아기 기준입니다.</p>
+          <ul class="compact-list">
+            <li>공항 왕복: <span class="money">10,400엔</span></li>
+            <li>시내 교통/택시 일부: <span class="money">7,000~13,000엔</span></li>
+            <li>teamLab Planets: <span class="money">7,200엔부터</span></li>
+            <li>식비 3박4일: <span class="money">55,000~85,000엔</span></li>
+            <li><strong>합계:</strong> 약 <span class="money">80,000~115,000엔</span>이면 “아낀 느낌은 아닌데 과소비도 아닌” 선입니다.</li>
+          </ul>
+        </article>
+      </div>
+      <p class="note">지도 속 선은 실제 철도 선형이 아니라 이동 순서 시각화입니다. 실제 플랫폼과 환승은 각 일자 Google Maps 링크에서 출발 직전에 확인하세요.</p>
+    </section>
+
+    <section>
+      <h2>3박4일 추천 일정</h2>
+
+      <article class="day">
+        <div class="day-head">
+          <div>
+            <h3>6월 19일 금요일 · 도착, 긴자 첫인상, 일찍 쉬기</h3>
+            <p>비행 후 무리하지 않고 “도쿄에 왔다”는 느낌만 정확히 가져가는 날입니다.</p>
+          </div>
+          <div class="day-number">D1</div>
+        </div>
+        <div class="day-grid">
+          <div id="map-day1" class="map" aria-label="Day 1 route map"></div>
+          <div class="day-body">
+            <ul class="time-list">
+              <li><span class="time">16:00</span><span>나리타 도착. 입국/수하물/화장실까지 60~90분 잡기.</span></li>
+              <li><span class="time">17:30</span><span>N'EX로 도쿄역 이동. 긴자 숙소면 도쿄역에서 택시가 가장 편합니다.</span></li>
+              <li><span class="time">19:00</span><span>체크인 후 유라쿠초·긴자에서 저녁. 줄 긴 곳보다 백화점/역 주변 식당 우선.</span></li>
+              <li><span class="time">20:15</span><span>긴자 와코 시계탑, 미츠코시 앞, KITTE 옥상정원 중 하나만 가볍게.</span></li>
+              <li><span class="time">21:00</span><span>숙소 복귀. 다음 날을 위해 편의점 간식, 물, 아기 아침거리 확보.</span></li>
+            </ul>
+            <div class="route-box">
+              <p><strong>이동:</strong> Narita Airport → Tokyo Station → Ginza/Yurakucho</p>
+              <p><strong>교통비:</strong> N'EX 왕복권 성인 5,200엔, 성인 2명 10,400엔. 도쿄역→긴자 택시 약 1,000~1,800엔.</p>
+              <p><strong>즐길 것:</strong> 긴자 야경, 도쿄역 마루노우치 외관, KITTE 옥상정원, Ginza Six 지하/식당층.</p>
+              <div class="btn-row">
+                <a class="btn" href="https://www.google.com/maps/dir/?api=1&origin=Narita+Airport&destination=Ginza,+Tokyo&travelmode=transit" target="_blank" rel="noreferrer">Google Maps 경로</a>
+                <a class="btn secondary" href="https://www.jreast.co.jp/en/multi/nex/" target="_blank" rel="noreferrer">N'EX 요금 확인</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="day">
+        <div class="day-head">
+          <div>
+            <h3>6월 20일 토요일 · 아사쿠사 전통 + 긴자 보행자 천국 쇼핑</h3>
+            <p>오전에는 전통, 오후에는 화려한 쇼핑. 아이 낮잠을 가운데 끼워 넣어 체력을 보존합니다.</p>
+          </div>
+          <div class="day-number">D2</div>
+        </div>
+        <div class="day-grid">
+          <div id="map-day2" class="map" aria-label="Day 2 route map"></div>
+          <div class="day-body">
+            <ul class="time-list">
+              <li><span class="time">08:30</span><span>긴자선으로 아사쿠사 이동. 주말이라 센소지는 10시 전 도착이 좋습니다.</span></li>
+              <li><span class="time">09:15</span><span>센소지, 나카미세, 스미다강 쪽 산책. 사진은 카미나리몬보다 사찰 안쪽이 덜 붐빕니다.</span></li>
+              <li><span class="time">11:00</span><span>아사쿠사에서 이른 점심. 긴 줄 라멘보다 소바, 텐동, 오니기리, 패밀리 레스토랑을 우선.</span></li>
+              <li><span class="time">12:30</span><span>숙소 복귀 또는 우에노공원/도쿄국립박물관 60~90분 옵션.</span></li>
+              <li><span class="time">15:00</span><span>긴자 쇼핑. 6~9월 주말/공휴일은 보통 12:00~18:00 보행자 천국입니다.</span></li>
+              <li><span class="time">18:00</span><span>미츠코시·마츠야·GINZA SIX 식당층 또는 유라쿠초 쪽에서 저녁 후 복귀.</span></li>
+            </ul>
+            <div class="route-box">
+              <p><strong>이동:</strong> Ginza → Asakusa/Sensoji → Ueno optional → Ginza</p>
+              <p><strong>교통비:</strong> 지하철 1회 보통 180~260엔대. 성인 2명 총 1,000~1,600엔 선. 피곤하면 아사쿠사→긴자 택시 약 3,000~4,500엔 예상.</p>
+              <p><strong>즐길 것:</strong> 센소지, 나카미세, 스미다강 산책, Itoya 문구, MUJI Ginza, UNIQLO Ginza, Ginza Six, 백화점 데파치카.</p>
+              <div class="btn-row">
+                <a class="btn" href="https://www.google.com/maps/dir/?api=1&origin=Ginza,+Tokyo&destination=Ginza+Six,+Tokyo&waypoints=Senso-ji,+Tokyo%7CTokyo+National+Museum&travelmode=transit" target="_blank" rel="noreferrer">Google Maps 경로</a>
+                <a class="btn secondary" href="https://www.ginza.jp/en/townguide/pedestrian-zone" target="_blank" rel="noreferrer">긴자 보행자 천국</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="day">
+        <div class="day-head">
+          <div>
+            <h3>6월 21일 일요일 · 도요스 teamLab Planets + 오다이바 베이</h3>
+            <p>사용자가 말한 “팀 어쩌구”는 도요스의 teamLab Planets가 맞습니다. 물을 걷는 전시라 아이 여벌옷이 핵심입니다.</p>
+          </div>
+          <div class="day-number">D3</div>
+        </div>
+        <div class="day-grid">
+          <div id="map-day3" class="map" aria-label="Day 3 route map"></div>
+          <div class="day-body">
+            <ul class="time-list">
+              <li><span class="time">09:00</span><span>츠키지 바깥시장 또는 숙소 근처에서 가벼운 아침. 비 오면 바로 신바시/시오도메로.</span></li>
+              <li><span class="time">10:15</span><span>유리카모메 탑승. 가능하면 맨 앞 칸에서 레인보우브리지와 베이 풍경 보기.</span></li>
+              <li><span class="time">10:45</span><span>도요스 센캬쿠반라이. 에도풍 거리, 간식, 족욕정원, 점심 후보.</span></li>
+              <li><span class="time">12:30</span><span>teamLab Planets 예약 입장. 11:30~13:30 사이 슬롯을 최우선으로 잡기.</span></li>
+              <li><span class="time">14:30</span><span>라라포트 도요스 또는 아리아케가든에서 낮잠/실내 휴식.</span></li>
+              <li><span class="time">16:30</span><span>오다이바 해변공원, 아쿠아시티, 다이버시티 건담 중 컨디션 맞춰 1~2개만.</span></li>
+              <li><span class="time">18:30</span><span>몰에서 저녁 후 택시 또는 유리카모메+지하철로 숙소 복귀.</span></li>
+            </ul>
+            <div class="route-box">
+              <p><strong>이동:</strong> Ginza/Tsukiji → Shiodome/Shimbashi → Toyosu/Senkyaku Banrai → teamLab Planets → Odaiba</p>
+              <p><strong>교통비:</strong> 유리카모메 1일 패스 성인 820엔, 성인 2명 1,640엔. teamLab 성인 3,600엔부터, 만 3세 이하 무료.</p>
+              <p><strong>즐길 것:</strong> teamLab 물 전시, 센캬쿠반라이 에도풍 시장, 유리카모메 전면 전망, 오다이바 해변, 다이버시티 건담.</p>
+              <div class="btn-row">
+                <a class="btn" href="https://www.google.com/maps/dir/?api=1&origin=Ginza,+Tokyo&destination=Odaiba+Marine+Park&waypoints=Toyosu+Senkyaku+Banrai%7CteamLab+Planets+TOKYO&travelmode=transit" target="_blank" rel="noreferrer">Google Maps 경로</a>
+                <a class="btn secondary" href="https://teamlabplanets.dmm.com/en" target="_blank" rel="noreferrer">teamLab 예약</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="day">
+        <div class="day-head">
+          <div>
+            <h3>6월 22일 월요일 · 나리타 12:30 출발</h3>
+            <p>출국일은 욕심내지 않습니다. 공항에는 10:30 전후 도착을 목표로 잡습니다.</p>
+          </div>
+          <div class="day-number">D4</div>
+        </div>
+        <div class="day-grid">
+          <div id="map-day4" class="map" aria-label="Day 4 route map"></div>
+          <div class="day-body">
+            <ul class="time-list">
+              <li><span class="time">07:30</span><span>숙소 근처에서 아침. 짐 정리와 아이 기저귀/간식 체크.</span></li>
+              <li><span class="time">08:30</span><span>호텔 출발. 긴자권이면 도쿄역까지 택시 이동이 안정적입니다.</span></li>
+              <li><span class="time">09:00</span><span>N'EX 도쿄역 출발편 탑승 목표. 실제 시간표는 전날 예약 시 확정.</span></li>
+              <li><span class="time">10:15</span><span>나리타 도착, 체크인/보안검색/면세. 아기 동선 때문에 2시간 전 도착 권장.</span></li>
+              <li><span class="time">12:30</span><span>출발.</span></li>
+            </ul>
+            <div class="route-box">
+              <p><strong>이동:</strong> Ginza/Tokyo Station → Narita Airport</p>
+              <p><strong>교통비:</strong> D1에 산 N'EX 왕복권 사용. 호텔→도쿄역 택시 약 1,000~1,800엔 예상.</p>
+              <p><strong>즐길 것:</strong> 공항에서 마지막 편의점 간식, 기념품, 아이 낮잠 타이밍 맞추기.</p>
+              <div class="btn-row">
+                <a class="btn" href="https://www.google.com/maps/dir/?api=1&origin=Ginza,+Tokyo&destination=Narita+Airport&travelmode=transit" target="_blank" rel="noreferrer">Google Maps 경로</a>
+                <a class="btn secondary" href="https://www.jreast.co.jp/en/multi/nex/" target="_blank" rel="noreferrer">N'EX 확인</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section>
+      <h2>사전예약 체크</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>항목</th>
+            <th>예약 필요도</th>
+            <th>권장 액션</th>
+            <th>비용 기준</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>teamLab Planets TOKYO</td>
+            <td>매우 높음</td>
+            <td>6월 21일 일요일 11:30~13:30 사이 시간지정권을 먼저 확보. 유모차는 내부 반입 불가라 아기띠/여벌옷 준비.</td>
+            <td>성인 3,600엔부터, 만 3세 이하 무료.</td>
+          </tr>
+          <tr>
+            <td>N'EX 또는 Skyliner</td>
+            <td>높음</td>
+            <td>도착일 공항에서 왕복권과 돌아가는 열차 시간까지 같이 잡기. 월요일은 09:00 전후 공항행을 목표.</td>
+            <td>N'EX 왕복 성인 5,200엔. Skyliner 편도 성인 2,470엔.</td>
+          </tr>
+          <tr>
+            <td>Tokyo Cruise 수상버스</td>
+            <td>옵션</td>
+            <td>대체 테마로 아사쿠사→오다이바를 넣을 경우 사전 예매. 주말 운항 수가 적고 날씨 취소 가능.</td>
+            <td>아사쿠사→오다이바 성인 2,000엔 전후.</td>
+          </tr>
+          <tr>
+            <td>식당</td>
+            <td>낮음</td>
+            <td>두돌 아기 동반이면 고정 예약보다 백화점 식당층, 몰, 호텔 근처 식당을 유연하게 쓰는 편이 좋습니다.</td>
+            <td>점심 4,000~7,000엔, 저녁 7,000~14,000엔 가족 기준.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>추가로 어울리는 테마 2개</h2>
+      <div class="theme-grid">
+        <article class="theme">
+          <h3>테마 A · 스카이트리 타운 + 스미다 수족관 + 수상버스</h3>
+          <p>비가 오거나 아이가 실내 동물을 좋아하면 D2 오전 또는 D3 일부를 이쪽으로 바꾸기 좋습니다.</p>
+          <div class="route">긴자 → 아사쿠사 → 스카이트리/스미다 수족관 → 솔라마치 → 수상버스 또는 지하철 복귀</div>
+          <ul class="compact-list">
+            <li><strong>좋은 점:</strong> 실내 비중이 높고, 수족관이 작아 아이 집중 시간이 맞습니다.</li>
+            <li><strong>주의:</strong> 스카이트리 전망대까지 넣으면 비용과 대기 피로가 늘어납니다. 수족관+솔라마치만 해도 충분합니다.</li>
+            <li><strong>비용:</strong> 스미다 수족관 성인 2,700엔, 두돌 아기는 무료 기준. 스카이트리 전망대는 날짜별 온라인 요금 확인.</li>
+          </ul>
+        </article>
+
+        <article class="theme">
+          <h3>테마 B · 메이지신궁 + 오모테산도 + 시부야 최신 분위기</h3>
+          <p>전통 숲과 최신 도심을 한 번에 보는 루트입니다. 다만 주말 시부야는 유모차 난이도가 높아 오전 짧게만 추천합니다.</p>
+          <div class="route">긴자 → 하라주쿠/메이지신궁 → 오모테산도 → 미야시타파크 또는 시부야 스크램블 외관 → 숙소</div>
+          <ul class="compact-list">
+            <li><strong>좋은 점:</strong> 전통, 패션, 최신 도쿄 분위기가 압축됩니다.</li>
+            <li><strong>주의:</strong> 토요일 오후 시부야는 혼잡합니다. D2 아사쿠사를 이미 가면 이 루트는 과감히 생략해도 됩니다.</li>
+            <li><strong>비용:</strong> 메이지신궁 무료, 지하철/JR 이동 성인 1인 500~900엔 선.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h2>아기 동반 운영 팁</h2>
+      <div class="split">
+        <article class="panel">
+          <h3>가방에 넣을 것</h3>
+          <ul class="compact-list">
+            <li>teamLab용 반바지/접히는 바지, 아기 여벌옷, 작은 수건.</li>
+            <li>가벼운 우비 또는 접이식 우산. 6월 도쿄는 습하고 소나기가 잦습니다.</li>
+            <li>아기 간식, 물, 작은 비닐봉투, 휴대용 선풍기 또는 쿨링타월.</li>
+            <li>백화점·몰 유아실을 적극 사용. 긴자, 스카이트리, 라라포트, 아쿠아시티가 편합니다.</li>
+          </ul>
+        </article>
+        <article class="panel">
+          <h3>현장에서 지킬 원칙</h3>
+          <ul class="compact-list">
+            <li>하루 핵심 목적지는 하나만. 남는 시간은 보너스입니다.</li>
+            <li>11:30 전 점심, 13:00~15:00 낮잠/실내휴식, 18:00 전 저녁을 기본 리듬으로.</li>
+            <li>긴 줄 맛집은 이번 여행의 만족도를 낮출 가능성이 큽니다. 백화점 식당층이 가족 여행에는 더 낫습니다.</li>
+            <li>택시는 “실패 비용”이 아니라 아이 컨디션을 사는 비용으로 하루 1회까지 허용합니다.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <h2>확인한 주요 출처</h2>
+      <p class="note">요금과 운영 조건은 2026년 6월 16일 기준으로 확인했습니다. 결제 직전 공식 페이지에서 한 번 더 확인하세요.</p>
+      <ul class="source-list">
+        <li><a href="https://www.jreast.co.jp/en/multi/nex/" target="_blank" rel="noreferrer">JR East N'EX Tokyo Round Trip Ticket</a></li>
+        <li><a href="https://www.keisei.co.jp/keisei/tetudou/skyliner/us/traffic/skyliner_fares.php" target="_blank" rel="noreferrer">Keisei Skyliner fares</a></li>
+        <li><a href="https://www.tokyometro.jp/en/ticket/regular/index.html" target="_blank" rel="noreferrer">Tokyo Metro regular fares</a></li>
+        <li><a href="https://www.tokyometro.jp/en/ticket/travel/index.html" target="_blank" rel="noreferrer">Tokyo Subway 24/48/72-hour ticket</a></li>
+        <li><a href="https://www.yurikamome.co.jp/en/ride-guidance/fare.html" target="_blank" rel="noreferrer">Yurikamome fare guide</a></li>
+        <li><a href="https://teamlabplanets.dmm.com/en" target="_blank" rel="noreferrer">teamLab Planets official ticket store</a> · <a href="https://teamlabplanets.dmm.com/en/help" target="_blank" rel="noreferrer">teamLab visitor help</a></li>
+        <li><a href="https://www.toyosu-senkyakubanrai.jp/languages/en/" target="_blank" rel="noreferrer">Toyosu Senkyaku Banrai official</a></li>
+        <li><a href="https://www.gotokyo.org/en/spot/1858/index.html" target="_blank" rel="noreferrer">GO TOKYO Toyosu Senkyaku Banrai hours</a></li>
+        <li><a href="https://www.ginza.jp/en/townguide/pedestrian-zone" target="_blank" rel="noreferrer">GINZA OFFICIAL pedestrian zone</a></li>
+        <li><a href="https://www.suijobus.co.jp/en/price/" target="_blank" rel="noreferrer">Tokyo Cruise fares</a></li>
+        <li><a href="https://www.gotokyo.org/en/spot/20/index.html" target="_blank" rel="noreferrer">Hama-rikyu Gardens</a></li>
+        <li><a href="https://www.tokyo-zoo.net/en/ueno/visitor-info/tickets/index.html" target="_blank" rel="noreferrer">Ueno Zoo admission</a></li>
+        <li><a href="https://www.tnm.jp/modules/r_free_page/index.php?id=113&lang=en" target="_blank" rel="noreferrer">Tokyo National Museum visitor information</a></li>
+        <li><a href="https://en.sumida-aquarium.com/news/5671/" target="_blank" rel="noreferrer">Sumida Aquarium admission price notice</a></li>
+        <li><a href="https://en.tokyo-skytree.jp/ticket/" target="_blank" rel="noreferrer">Tokyo Skytree official tickets</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script>
+    const routes = {
+      "map-day1": {
+        color: "#a13d2f",
+        points: [
+          ["Narita Airport", 35.7653, 140.3859],
+          ["Tokyo Station", 35.6812, 139.7671],
+          ["Ginza base", 35.6719, 139.7658],
+          ["Yurakucho", 35.6751, 139.7633]
+        ]
+      },
+      "map-day2": {
+        color: "#536f43",
+        points: [
+          ["Ginza base", 35.6719, 139.7658],
+          ["Senso-ji / Asakusa", 35.7148, 139.7967],
+          ["Tokyo National Museum / Ueno", 35.7188, 139.7765],
+          ["Ginza shopping", 35.6699, 139.7649]
+        ]
+      },
+      "map-day3": {
+        color: "#0f6a6d",
+        points: [
+          ["Ginza base", 35.6719, 139.7658],
+          ["Tsukiji Outer Market", 35.6655, 139.7707],
+          ["Shiodome / Shimbashi", 35.6655, 139.7597],
+          ["Toyosu Senkyaku Banrai", 35.6447, 139.7854],
+          ["teamLab Planets TOKYO", 35.6491, 139.7904],
+          ["Odaiba Seaside Park", 35.6298, 139.7754],
+          ["DiverCity Tokyo Plaza", 35.6252, 139.7756]
+        ]
+      },
+      "map-day4": {
+        color: "#28547a",
+        points: [
+          ["Ginza base", 35.6719, 139.7658],
+          ["Tokyo Station", 35.6812, 139.7671],
+          ["Narita Airport", 35.7653, 140.3859]
+        ]
+      }
+    };
+
+    function drawRouteMap(id, data) {
+      const el = document.getElementById(id);
+      if (!el || typeof L === "undefined") return;
+
+      const latLngs = data.points.map((point) => [point[1], point[2]]);
+      const map = L.map(id, {
+        scrollWheelZoom: false,
+        zoomControl: true
+      });
+
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution: "&copy; OpenStreetMap contributors"
+      }).addTo(map);
+
+      const line = L.polyline(latLngs, {
+        color: data.color,
+        weight: 4,
+        opacity: 0.9
+      }).addTo(map);
+
+      data.points.forEach((point, index) => {
+        const marker = L.circleMarker([point[1], point[2]], {
+          radius: 8,
+          color: "#ffffff",
+          weight: 2,
+          fillColor: data.color,
+          fillOpacity: 1
+        }).addTo(map);
+        marker.bindPopup(`${index + 1}. ${point[0]}`);
+      });
+
+      map.fitBounds(line.getBounds(), { padding: [28, 28] });
+    }
+
+    Object.entries(routes).forEach(([id, data]) => drawRouteMap(id, data));
+  </script>
+</body>
+</html>
